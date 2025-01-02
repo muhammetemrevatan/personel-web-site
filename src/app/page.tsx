@@ -60,10 +60,7 @@ const Home = () => {
   }, []);
 
   const scrollToTop = () => {
-    const container = document.querySelector(".scroll-container");
-    if (container) {
-      container.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const fetchProjects = async () => {
