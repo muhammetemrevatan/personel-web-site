@@ -85,7 +85,7 @@ const Home = () => {
 
   return (
     <Template>
-      <div className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth relative scroll-container">
+      <div className="relative md:snap-y md:snap-mandatory h-screen overflow-y-scroll scroll-smooth scroll-container">
         <motion.button
           onClick={scrollToTop}
           initial={{ opacity: 0, scale: 0.5 }}
@@ -135,7 +135,7 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={sectionVariants}
-          className="snap-start h-screen flex items-center bg-[#0a192f]"
+          className="min-h-screen md:snap-start flex items-center bg-[#0a192f] py-20 md:py-0"
         >
           <div className="container mx-auto px-4">
             <div className="w-full">
@@ -235,7 +235,7 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={sectionVariants}
-          className="snap-start h-screen flex items-center bg-[#112240]"
+          className="min-h-screen md:snap-start flex items-center bg-[#112240] py-20 md:py-0"
         >
           <div className="container mx-auto px-4 max-w-[1600px]">
             <motion.div
@@ -419,7 +419,7 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={sectionVariants}
-          className="snap-start h-screen flex items-center bg-[#0a192f]"
+          className="min-h-screen md:snap-start flex items-center bg-[#0a192f] py-20 md:py-0"
         >
           <div className="container mx-auto px-4">
             <motion.div
