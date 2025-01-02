@@ -23,22 +23,15 @@ const Home = () => {
   const [activeSection, setActiveSection] = useState(0);
   const [projects, setProjects] = useState<Repository[]>([]);
   const [error, setError] = useState<string | null>(null);
-
-  const fetchProjects = async () => {
-    try {
-      setError(null);
-      const data = await getFeaturedProjects();
-      setProjects(data);
-    } catch (err) {
-      setError(
-        "Failed to load projects. Please check your internet connection and try again."
-      );
-      console.error("Error fetching projects:", err);
-    }
-  };
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    fetchProjects();
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -59,16 +52,68 @@ const Home = () => {
       }
     );
 
-    document.querySelectorAll("section").forEach((section) => {
+    document.querySelectorAll("section[id^='section-']").forEach((section) => {
       observer.observe(section);
     });
 
     return () => observer.disconnect();
   }, []);
 
+  const scrollToTop = () => {
+    const container = document.querySelector(".scroll-container");
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      setError(null);
+      const data = await getFeaturedProjects();
+      setProjects(data);
+    } catch (err) {
+      setError(
+        "Failed to load projects. Please check your internet connection and try again."
+      );
+      console.error("Error fetching projects:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   return (
     <Template>
-      <div className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth relative">
+      <div className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth relative scroll-container">
+        <motion.button
+          onClick={scrollToTop}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: showScrollTop ? 1 : 0,
+            scale: showScrollTop ? 1 : 0.5,
+            y: showScrollTop ? 0 : 20,
+          }}
+          className="fixed bottom-8 right-8 z-50 bg-[#64ffda] text-[#0a192f] w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-[#64ffda]/90 transition-colors"
+          whileHover={{ y: -5 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+        </motion.button>
+
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-50">
           {[0, 1, 2].map((_, i) => (
             <a

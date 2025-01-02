@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import Template from "../components/Template";
 import type { BlogPost } from "@/utils/blog";
@@ -19,6 +19,21 @@ export default function BlogList({ initialPosts, categories, tags }: Props) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [loadingPost, setLoadingPost] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const filteredPosts = useMemo(() => {
     return initialPosts.filter((post) => {
@@ -50,6 +65,34 @@ export default function BlogList({ initialPosts, categories, tags }: Props) {
     <Template>
       <div className="min-h-screen bg-[#0a192f] py-20">
         <div className="container mx-auto px-4">
+          <motion.button
+            onClick={scrollToTop}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{
+              opacity: showScrollTop ? 1 : 0,
+              scale: showScrollTop ? 1 : 0.5,
+              y: showScrollTop ? 0 : 20,
+            }}
+            className="fixed bottom-8 right-8 z-50 bg-[#64ffda] text-[#0a192f] w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-[#64ffda]/90 transition-colors"
+            whileHover={{ y: -5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              />
+            </svg>
+          </motion.button>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -162,11 +205,26 @@ export default function BlogList({ initialPosts, categories, tags }: Props) {
                 </div>
                 <motion.a
                   href={`/blog/${post.slug}`}
-                  className="inline-flex items-center text-[#64ffda] hover:text-[#64ffda]/80 transition group"
+                  className="inline-flex items-center text-[#64ffda] hover:text-[#64ffda]/80 transition group relative"
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLoadingPost(post.slug);
+                    window.location.href = `/blog/${post.slug}`;
+                  }}
                 >
-                  Read more
+                  <span className="relative">
+                    Read more
+                    {loadingPost === post.slug && (
+                      <motion.div
+                        className="absolute -bottom-2 left-0 w-full h-0.5 bg-[#64ffda]"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 2 }}
+                      />
+                    )}
+                  </span>
                   <motion.span
                     className="ml-1"
                     initial={{ x: 0 }}
