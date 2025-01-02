@@ -4,14 +4,11 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Link from "next/link";
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function BlogPost({ params }: Props) {
-  const post = await getPostBySlug(params.slug);
+export default async function BlogPost(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await props.params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
