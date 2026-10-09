@@ -11,6 +11,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://muhammetemrevatan.com"),
   title: "Muhammet Emre Vatan - Software Engineer",
   description:
     "Software Engineer with expertise in Java, Spring Boot, and cloud technologies. Specialized in building scalable backend solutions, microservices architecture, and full-stack development with React and Next.js. View my portfolio and projects.",

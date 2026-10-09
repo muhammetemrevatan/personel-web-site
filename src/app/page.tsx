@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Template from "./components/Template";
 import { useState, useEffect } from "react";
-import { getFeaturedProjects } from "@/services/github";
+
 import { Repository } from "@/types/github";
 import ErrorMessage from "./components/ErrorMessage";
 
@@ -66,7 +66,9 @@ const Home = () => {
   const fetchProjects = async () => {
     try {
       setError(null);
-      const data = await getFeaturedProjects();
+      const response = await fetch("/api/projects");
+      if (!response.ok) throw new Error("Could not load projects");
+      const data: Repository[] = await response.json();
       setProjects(data);
     } catch (err) {
       setError(

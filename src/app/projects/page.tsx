@@ -2,6 +2,8 @@ import { getProjects } from "@/services/github";
 import ProjectList from "./ProjectList";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Projects - Muhammet Emre Vatan",
   description:

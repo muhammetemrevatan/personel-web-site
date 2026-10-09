@@ -1,15 +1,18 @@
+import "server-only";
+
 import { ProjectMetadata, Repository } from "@/types/github";
 import { getCachedData } from "@/utils/cache";
 
-const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-const GITHUB_USERNAME = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_USERNAME = process.env.GITHUB_USERNAME || "muhammetemrevatan";
 
 async function fetchWithAuth(url: string) {
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
     },
   });
+  if (!response.ok) throw new Error(`GitHub request failed: ${response.status}`);
   return response.json();
 }
 
