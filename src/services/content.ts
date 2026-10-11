@@ -4,7 +4,7 @@ import type { Language } from "@/lib/language";
 export interface ContentRecord {
   id: string; collectionId: string; collectionName: string; slug: string; title: string; description: string;
   content: string; language: Language; published: boolean; featured: boolean;
-  date: string; category: string; tags: string[]; cover: string;
+  date: string; created: string; category: string; tags: string[]; cover: string;
   demo_url: string; source_url: string; outcome: string; order: number;
 }
 export class ContentError extends Error {}
@@ -18,7 +18,7 @@ export const getContent = cache(async (collection: "projects" | "posts", lang?: 
   do {
     const params = new URLSearchParams({
       filter: `published = true${lang ? ` && language = "${lang}"` : ""}`,
-      sort: collection === "projects" ? "order,-date" : "-date",
+      sort: collection === "projects" ? "order,-date" : "-created,-date,-id",
       perPage: "100", page: String(page),
     });
     let response: Response;
