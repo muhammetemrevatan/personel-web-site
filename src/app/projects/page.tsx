@@ -1,22 +1,10 @@
-import { getProjects } from "@/services/github";
-import ProjectList from "./ProjectList";
-import { Metadata } from "next";
-
+import { getContent } from "@/services/content";
+import { language, text } from "@/lib/language";
+import ContentCards from "../components/ContentCards";
+import ContentUnavailable from "../components/ContentUnavailable";
 export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title: "Projects - Muhammet Emre Vatan",
-  description:
-    "Check out my latest projects and contributions in software development.",
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
-};
-
-export default async function ProjectsPage() {
-  const projects = await getProjects();
-
-  return <ProjectList projects={projects} />;
+export default async function Projects({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const lang = language((await searchParams).lang);
+  const result = await getContent("projects", lang).then(records => ({ records })).catch(() => null);
+  return <div className="max-w-6xl mx-auto px-6 py-24"><h1 className="text-5xl font-bold text-[#ccd6f6] mb-6">{text(lang, "Çalışmalarım", "My work")}</h1><p className="text-xl text-[#8892b0] mb-12">{text(lang, "Fikirler, çözümler ve ortaya çıkan ürünler.", "Ideas, solutions, and the products that came out of them.")}</p>{result ? <ContentCards records={result.records} kind="projects" lang={lang} /> : <ContentUnavailable lang={lang} />}</div>;
 }

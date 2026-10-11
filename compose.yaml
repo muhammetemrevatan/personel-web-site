@@ -1,0 +1,26 @@
+services:
+  website:
+    build: .
+    restart: unless-stopped
+    environment:
+      POCKETBASE_URL: http://pocketbase:8090
+      POCKETBASE_PUBLIC_URL: ${POCKETBASE_PUBLIC_URL:-http://localhost:8090}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      pocketbase:
+        condition: service_healthy
+  pocketbase:
+    build: ./pocketbase
+    restart: unless-stopped
+    volumes:
+      - pocketbase_data:/pb/pb_data
+    ports:
+      - "127.0.0.1:8090:8090"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8090/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  pocketbase_data:

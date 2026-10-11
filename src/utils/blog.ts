@@ -1,71 +1,15 @@
-"use server";
-
-import fs from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
-
-const BLOG_DIR = path.join(process.cwd(), "content/blog");
-
+import "server-only";
+import { getContent } from "@/services/content";
 export interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  category: string;
-  readTime: string;
-  description: string;
-  tags: string[];
-  content: string;
-  language: "en" | "tr";
+  slug: string; title: string; date: string; category: string; readTime: string;
+  description: string; tags: string[]; content: string; language: "en" | "tr";
 }
-
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const files = await fs.promises.readdir(BLOG_DIR);
-  const posts = await Promise.all(
-    files
-      .filter((file) => file.endsWith(".md"))
-      .map(async (file) => {
-        const slug = file.replace(".md", "");
-        const filePath = path.join(BLOG_DIR, file);
-        const fileContent = await fs.promises.readFile(filePath, "utf-8");
-        const { data, content } = matter(fileContent);
-
-        return {
-          slug,
-          content,
-          ...data,
-        } as BlogPost;
-      })
-  );
-
-  return posts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return (await getContent("posts")).map(r => ({ ...r, tags: r.tags || [],
+    date: r.date.slice(0, 10), readTime: `${Math.max(1, Math.ceil(r.content.split(/\s+/).length / 200))} min` }));
 }
-
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  try {
-    const filePath = path.join(BLOG_DIR, `${slug}.md`);
-    const fileContent = await fs.promises.readFile(filePath, "utf-8");
-    const { data, content } = matter(fileContent);
-
-    return {
-      slug,
-      content,
-      ...data,
-    } as BlogPost;
-  } catch {
-    return null;
-  }
+  return (await getAllPosts()).find(p => p.slug === slug) || null;
 }
-
-export async function getAllCategories(): Promise<string[]> {
-  const posts = await getAllPosts();
-  const categories = new Set(posts.map((post) => post.category));
-  return Array.from(categories);
-}
-
-export async function getAllTags(): Promise<string[]> {
-  const posts = await getAllPosts();
-  const tags = new Set(posts.flatMap((post) => post.tags));
-  return Array.from(tags);
-}
+export async function getAllCategories() { return Array.from(new Set((await getAllPosts()).map(p => p.category))); }
+export async function getAllTags() { return Array.from(new Set((await getAllPosts()).flatMap(p => p.tags))); }
