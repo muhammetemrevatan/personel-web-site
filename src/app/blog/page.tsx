@@ -1,3 +1,4 @@
+export const metadata = { title: "Writing", description: "Development notes, ideas, and experiences by Muhammet Emre Vatan." };
 import { getAllPosts } from "@/utils/blog";
 import { language } from "@/lib/language";
 import BlogList from "./BlogList";

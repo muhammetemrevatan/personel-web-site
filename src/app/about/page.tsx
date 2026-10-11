@@ -1,0 +1,6 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+export const metadata: Metadata = { title: "About", description: "About Muhammet Emre Vatan and the work behind this personal portfolio." };
+export default function About() {
+  return <div className="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-24"><p className="eyebrow mb-6">About me</p><h1 className="text-5xl md:text-7xl font-medium tracking-tighter mb-10">The person<br />behind the work.</h1><div className="grid md:grid-cols-[1fr_2fr] gap-8 md:gap-16 border-t border-[var(--border)] pt-10"><p className="text-sm text-[var(--muted)]">Muhammet Emre Vatan<br />Software engineer</p><div className="max-w-[65ch] space-y-6 text-lg leading-relaxed text-[var(--muted)]"><p>I enjoy turning ideas into working software. This portfolio brings together the things I build and the lessons I take from building them.</p><p>I care about explaining the work: the problem a project addresses, the choices made along the way, and the outcome. My writing is a place to share development notes and explore ideas in more detail.</p><div className="flex flex-wrap gap-6 pt-4 text-sm text-[var(--foreground)]"><Link href="/projects">Explore my work ↗</Link><Link href="/blog">Read my writing ↗</Link><a href="mailto:muhammetemrevatan@gmail.com">Say hello ↗</a></div></div></div></div>;
+}

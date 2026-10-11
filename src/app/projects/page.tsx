@@ -1,3 +1,4 @@
+export const metadata = { title: "Projects", description: "Selected software projects by Muhammet Emre Vatan: problems, decisions, and outcomes." };
 import { getContent } from "@/services/content";
 import { language, text } from "@/lib/language";
 import ContentCards from "../components/ContentCards";
