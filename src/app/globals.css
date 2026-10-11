@@ -1,26 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.font-dancing-script {
-  font-family: var(--font-dancing-script);
-  font-weight: 300;
-}
+:root { color-scheme: dark; --background: #151616; --surface: #1d1f1f; --foreground: #e5e5df; --muted: #a0a39c; --accent: #bdc9b3; --border: #333632; }
+:root[data-theme="light"] { color-scheme: light; --background: #f5f4ef; --surface: #ebeae4; --foreground: #252824; --muted: #62675d; --accent: #465c3c; --border: #d5d7ce; }
+body { margin: 0; color: var(--foreground); background: var(--background); font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--accent); color: var(--background); }
+a, button { transition: color 160ms, background 160ms, border-color 160ms; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+.eyebrow { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.portfolio-title { font-size: clamp(3.3rem, 8.5vw, 7.5rem); line-height: 1.02; letter-spacing: -.065em; font-weight: 500; }
+.section-heading { font-size: 1.6rem; letter-spacing: -.035em; font-weight: 500; }
+.prose { --tw-prose-body: var(--muted); --tw-prose-headings: var(--foreground); --tw-prose-bold: var(--foreground); --tw-prose-links: var(--accent); --tw-prose-code: var(--foreground); --tw-prose-quotes: var(--foreground); --tw-prose-bullets: var(--muted); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

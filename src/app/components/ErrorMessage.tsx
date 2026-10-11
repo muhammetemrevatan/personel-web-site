@@ -12,7 +12,7 @@ export default function ErrorMessage({ message, retryFn }: ErrorMessageProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center p-8 bg-[#112240] rounded-lg border border-red-500/10"
+      className="flex flex-col items-center justify-center p-8 bg-[var(--surface)] rounded-lg border border-red-500/10"
     >
       <svg
         className="w-12 h-12 text-red-500 mb-4"
@@ -28,7 +28,7 @@ export default function ErrorMessage({ message, retryFn }: ErrorMessageProps) {
         />
       </svg>
       <h3 className="text-xl font-semibold text-red-500 mb-2">Error</h3>
-      <p className="text-[#8892b0] text-center mb-4">{message}</p>
+      <p className="text-[var(--muted)] text-center mb-4">{message}</p>
       {retryFn && (
         <button
           onClick={retryFn}
