@@ -8,6 +8,6 @@ export default async function Blog({ searchParams }: { searchParams: Promise<{ l
   const lang = language((await searchParams).lang);
   const posts = await getAllPosts().catch(() => null);
   if (!posts) return <div className="max-w-6xl mx-auto px-6 py-24"><ContentUnavailable lang={lang} /></div>;
-  const selected = posts;
+  const selected = posts.filter(p => p.language === lang);
   return <BlogList initialPosts={selected} categories={Array.from(new Set(selected.map(p => p.category)))} tags={Array.from(new Set(selected.flatMap(p => p.tags)))} lang={lang} />;
 }

@@ -6,11 +6,10 @@ import { href, text, type Language } from "@/lib/language";
 export default function BlogList({ initialPosts, categories, tags, lang }: { initialPosts: BlogPost[]; categories: string[]; tags: string[]; lang: Language }) {
   const [query, setQuery] = useState(""), [category, setCategory] = useState(""), [tag, setTag] = useState("");
   const [page, setPage] = useState(1);
-  const [contentLanguage, setContentLanguage] = useState("");
   const filtered = useMemo(() => initialPosts.filter(p =>
     `${p.title} ${p.description}`.toLocaleLowerCase(lang).includes(query.toLocaleLowerCase(lang)) &&
-    (!category || p.category === category) && (!tag || p.tags.includes(tag)) && (!contentLanguage || p.language === contentLanguage)
-  ), [initialPosts, query, category, tag, lang, contentLanguage]);
+    (!category || p.category === category) && (!tag || p.tags.includes(tag))
+  ), [initialPosts, query, category, tag, lang]);
   const pages = Math.max(1, Math.ceil(filtered.length / 6));
   const currentPage = Math.min(page, pages);
   const controls = "bg-[var(--surface)] rounded-lg border border-[var(--border)] p-3 text-[var(--foreground)]";
@@ -19,7 +18,6 @@ export default function BlogList({ initialPosts, categories, tags, lang }: { ini
     <h1 className="text-5xl md:text-7xl tracking-tighter font-medium text-[var(--foreground)] mb-6">{text(lang, "Yazılarım", "Writing")}</h1>
     <p className="text-xl text-[var(--muted)] mb-10">{text(lang, "Geliştirme notları, deneyimler ve öğrendiklerim.", "Development notes, experiences, and things I have learned.")}</p>
     <div className="flex flex-wrap gap-3 mb-10">
-      <select aria-label="Article language" className={controls} value={contentLanguage} onChange={e => { setContentLanguage(e.target.value); setPage(1); }}><option value="">{text(lang, "Tüm diller", "All languages")}</option><option value="en">English</option><option value="tr">Türkçe</option></select>
       <input aria-label={text(lang, "Yazılarda ara", "Search articles")} placeholder={text(lang, "Yazılarda ara…", "Search articles…")} className={`${controls} flex-1 min-w-48`} value={query} onChange={e => { setQuery(e.target.value); setPage(1); }} />
       <select aria-label={text(lang, "Kategori", "Category")} className={controls} value={category} onChange={e => { setCategory(e.target.value); setPage(1); }}><option value="">{text(lang, "Tüm kategoriler", "All categories")}</option>{categories.map(c => <option key={c}>{c}</option>)}</select>
       <select aria-label={text(lang, "Etiket", "Tag")} className={controls} value={tag} onChange={e => { setTag(e.target.value); setPage(1); }}><option value="">{text(lang, "Tüm etiketler", "All tags")}</option>{tags.map(t => <option key={t}>{t}</option>)}</select>
