@@ -6,7 +6,7 @@ import ContentUnavailable from "./components/ContentUnavailable";
 export const dynamic = "force-dynamic";
 export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const lang = language((await searchParams).lang);
-  const [projects, posts] = await Promise.allSettled([getContent("projects"), getContent("posts")]);
+  const [projects, posts] = await Promise.allSettled([getContent("projects", lang), getContent("posts")]);
   const featured = projects.status === "fulfilled" ? projects.value.filter(p => p.featured) : [];
   const work = projects.status === "fulfilled" ? (featured.length ? featured : projects.value).slice(0,4) : [];
   const writing = posts.status === "fulfilled" ? posts.value.filter(p => p.language === lang).slice(0,3) : [];
