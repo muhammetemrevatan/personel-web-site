@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "The personal portfolio of Muhammet Emre Vatan. Software projects, ideas, and development notes.",
   authors: [{ name: "Muhammet Emre Vatan" }],
   alternates: { types: { "application/rss+xml": "/feed.xml" } },
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: [{ url: "/favicon.svg?v=2", type: "image/svg+xml" }, { url: "/favicon.ico?v=2", sizes: "any" }], apple: "/apple-touch-icon.png" },
   openGraph: { title: "Muhammet Emre Vatan", siteName: "Muhammet Emre Vatan", type: "website" },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
