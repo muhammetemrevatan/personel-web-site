@@ -43,6 +43,7 @@ export function coverURL(r: ContentRecord): string | undefined {
     "gsm-message-sender": "gsm-message-sender.svg",
     "employee-data-batch-processor": "employee-data-batch-processor.svg",
     "telegram-reminder-assistant": "telegram-reminder-assistant.svg",
+    "daily-ai-news-digest": "daily-ai-news-digest.png",
   };
 
   const illustration = illustrations[projectSlug];
