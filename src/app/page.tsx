@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getContent } from "@/services/content";
+import { coverURL, getContent } from "@/services/content";
 import { language, href, text } from "@/lib/language";
 import ContentUnavailable from "./components/ContentUnavailable";
 export const dynamic = "force-dynamic";
@@ -17,7 +17,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
     </section>
     <section id="selected-work" className="pt-14 md:pt-20 pb-8">
       <div className="flex justify-between items-baseline gap-4 mb-9"><h2 className="editorial-heading">{text(lang,"Seçili işler","Selected work")}</h2><Link href={href("/projects",lang)} className="eyebrow">{work.length ? `${String(work.length).padStart(2,"0")} projects ↗` : text(lang,"Tüm projeler ↗","All projects ↗")}</Link></div>
-      {projects.status === "fulfilled" ? (work.length ? <div className="border-t border-[var(--border)]">{work.map((p,i)=><Link key={p.id} href={href(`/projects/${p.slug}`,lang)} className="group grid md:grid-cols-[40px_1.1fr_1fr_100px] gap-4 md:gap-8 py-7 border-b border-[var(--border)] items-center"><span className="font-mono text-xs text-[var(--accent)]">{String(i+1).padStart(2,"0")}</span><h3 className="font-editorial text-3xl tracking-tight group-hover:text-[var(--accent)]">{p.title}</h3><p className="text-sm text-[var(--muted)] leading-relaxed">{p.description}</p><span className="eyebrow md:text-right">{p.category || "Project"} ↗</span></Link>)}</div> : <div className="py-8 border-y border-[var(--border)]"><p className="text-[var(--muted)] max-w-lg leading-relaxed">{text(lang,"Projelerimin hikâyelerini hazırlıyorum. Bu sırada geliştirme notlarıma veya GitHub üzerindeki çalışmalarıma göz atabilirsin.","I am preparing the stories behind my projects. In the meantime, explore my writing or take a look at my work on GitHub.")}</p><a href="https://github.com/muhammetemrevatan" target="_blank" rel="noopener noreferrer" className="inline-block mt-5 text-sm text-[var(--accent)]">Explore GitHub ↗</a></div>) : <ContentUnavailable lang={lang} />}
+      {projects.status === "fulfilled" ? (work.length ? <div className="border-t border-[var(--border)]">{work.map((p,i)=>{
+        const cover = coverURL(p);
+        return <Link key={p.id} href={href(`/projects/${p.slug}`,lang)} className={`group grid ${cover ? "md:grid-cols-[40px_112px_1.1fr_1fr_100px]" : "md:grid-cols-[40px_1.1fr_1fr_100px]"} gap-4 md:gap-6 py-7 border-b border-[var(--border)] items-center`}>
+          <span className="font-mono text-xs text-[var(--accent)]">{String(i+1).padStart(2,"0")}</span>
+          {cover && <Image src={cover} alt="" width={690} height={410} unoptimized sizes="(min-width: 768px) 112px, 100vw" className="w-full aspect-video object-cover rounded-md border border-[var(--border)] transition-transform duration-300 group-hover:scale-[1.03]" />}
+          <h3 className="font-editorial text-3xl tracking-tight group-hover:text-[var(--accent)]">{p.title}</h3>
+          <p className="text-sm text-[var(--muted)] leading-relaxed">{p.description}</p>
+          <span className="eyebrow md:text-right">{p.category || "Project"} ↗</span>
+        </Link>;
+      })}</div> : <div className="py-8 border-y border-[var(--border)]"><p className="text-[var(--muted)] max-w-lg leading-relaxed">{text(lang,"Projelerimin hikâyelerini hazırlıyorum. Bu sırada geliştirme notlarıma veya GitHub üzerindeki çalışmalarıma göz atabilirsin.","I am preparing the stories behind my projects. In the meantime, explore my writing or take a look at my work on GitHub.")}</p><a href="https://github.com/muhammetemrevatan" target="_blank" rel="noopener noreferrer" className="inline-block mt-5 text-sm text-[var(--accent)]">Explore GitHub ↗</a></div>) : <ContentUnavailable lang={lang} />}
     </section>
     <section className="py-14 md:py-20"><div className="flex justify-between items-baseline gap-4 mb-8"><h2 className="editorial-heading">{text(lang,"Yazılar","Writing")}</h2><Link href={href("/blog",lang)} className="text-sm text-[var(--accent)]">{text(lang,"Tüm yazılar →","All writing →")}</Link></div>
       {posts.status === "fulfilled" ? <div className="grid md:grid-cols-2 gap-5">{writing.map((p,i)=><article key={p.id} className={`rounded-xl bg-[var(--surface)] border border-[var(--border)] p-6 md:p-7 ${i===2 ? "md:col-span-2" : ""}`}><p className="eyebrow mb-4">{new Date(p.date).toLocaleDateString(lang,{month:"short",year:"numeric",timeZone:"UTC"})} · {Math.max(1,Math.ceil(p.content.split(/\s+/).length/200))} min</p><h3 className="font-editorial text-2xl md:text-3xl tracking-tight mb-3"><Link href={href(`/blog/${p.slug}`,lang)}>{p.title}</Link></h3><p className="text-sm text-[var(--muted)] leading-relaxed">{p.description}</p></article>)}</div> : <ContentUnavailable lang={lang} />}

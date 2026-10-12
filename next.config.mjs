@@ -16,6 +16,10 @@ const nextConfig = {
   outputFileTracingRoot: fileURLToPath(new URL(".", import.meta.url)),
   reactStrictMode: true,
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+  webpack(config) {
+    config.resolve.alias["@"] = fileURLToPath(new URL("./src", import.meta.url));
+    return config;
+  },
 };
 
 export default withMDX(nextConfig);

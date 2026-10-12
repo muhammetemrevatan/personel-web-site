@@ -33,8 +33,20 @@ export const getContent = cache(async (collection: "projects" | "posts", lang?: 
   return records;
 });
 export function coverURL(r: ContentRecord): string | undefined {
-  if (!r.cover) return undefined;
-  return `/api/media/${encodeURIComponent(r.collectionName)}/${encodeURIComponent(r.id)}`;
+  if (r.cover) return `/api/media/${encodeURIComponent(r.collectionName)}/${encodeURIComponent(r.id)}`;
+  if (r.collectionName !== "projects") return undefined;
+
+  const projectSlug = r.slug.replace(/-tr$/, "");
+  const illustrations: Record<string, string> = {
+    "toxifyou-social-platform": "toxifyou-sosyal-platform.svg",
+    "courier-tracking-system": "courier-tracking-system.svg",
+    "gsm-message-sender": "gsm-message-sender.svg",
+    "employee-data-batch-processor": "employee-data-batch-processor.svg",
+    "telegram-reminder-assistant": "telegram-reminder-assistant.svg",
+  };
+
+  const illustration = illustrations[projectSlug];
+  return illustration ? `/projects/${illustration}` : undefined;
 }
 export function safeExternalURL(value?: string): string | undefined {
   try { const u = new URL(value || ""); return ["http:", "https:"].includes(u.protocol) ? u.href : undefined; }
