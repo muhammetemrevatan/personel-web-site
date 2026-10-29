@@ -18,7 +18,7 @@ export const getContent = cache(async (collection: "projects" | "posts", lang?: 
   do {
     const params = new URLSearchParams({
       filter: `published = true${lang ? ` && language = "${lang}"` : ""}`,
-      sort: collection === "projects" ? "order,-date" : "-created,-date,-id",
+      sort: "-created,-date,-id",
       perPage: "100", page: String(page),
     });
     let response: Response;
